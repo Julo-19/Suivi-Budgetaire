@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personnels', function (Blueprint $table) {
+        Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); 
-            $table->string('first_name'); 
-            $table->string('poste'); 
-            $table->string('telephone'); 
+            $table->foreignId('categorie_id')->constrained('categories')->cascadeOnDelete();
+            $table->string('mois'); 
+            $table->integer('annee'); 
+            $table->decimal('montant'); 
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personnels');
+        Schema::dropIfExists('budgets');
     }
 };

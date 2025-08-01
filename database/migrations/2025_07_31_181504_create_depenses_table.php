@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('salaires', function (Blueprint $table) {
+        Schema::create('depenses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('categorie_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('personnel_id')->constrained('personnels')->cascadeOnDelete();
-            $table->string('mois'); 
+            $table->string('libelle');
+            $table->decimal('montant');
+            $table->date('date_depense');
+            $table->string('mois');
             $table->integer('annee');
-            $table->string('net_a_payer'); 
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('salaires');
+        Schema::dropIfExists('depenses');
     }
 };

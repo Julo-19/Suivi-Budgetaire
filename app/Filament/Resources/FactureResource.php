@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PersonnelResource\Pages;
-use App\Filament\Resources\PersonnelResource\RelationManagers;
-use App\Models\Personnel;
+use App\Filament\Resources\FactureResource\Pages;
+use App\Filament\Resources\FactureResource\RelationManagers;
+use App\Models\Facture;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PersonnelResource extends Resource
+class FactureResource extends Resource
 {
-    protected static ?string $model = Personnel::class;
+    protected static ?string $model = Facture::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,22 +23,7 @@ class PersonnelResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-
-                Forms\Components\TextInput::make('first_name')
-                ->required()
-                ->maxLength(255),
-
-                Forms\Components\TextInput::make('poste') 
-                ->required()
-                ->maxLength(255),
-
-                Forms\Components\TextInput::make('telephone') 
-                ->required()
-                ->maxLength(255),
-
+                //
             ]);
     }
 
@@ -46,8 +31,7 @@ class PersonnelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('first_name'),
+                //
             ])
             ->filters([
                 //
@@ -72,9 +56,9 @@ class PersonnelResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPersonnels::route('/'),
-            'create' => Pages\CreatePersonnel::route('/create'),
-            'edit' => Pages\EditPersonnel::route('/{record}/edit'),
+            'index' => Pages\ListFactures::route('/'),
+            'create' => Pages\CreateFacture::route('/create'),
+            'edit' => Pages\EditFacture::route('/{record}/edit'),
         ];
     }
 }
