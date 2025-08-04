@@ -23,7 +23,31 @@ class FactureResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Select::make('depense_id')
+                ->relationship('depense', 'libelle')
+                ->searchable()
+                ->preload()
+                ->required(),
+
+                Forms\Components\TextInput::make('numero')
+                ->required()
+                ->maxLength(255),
+
+                Forms\Components\TextInput::make('fichier')
+                ->required()
+                ->maxLength(255),
+
+                Forms\Components\DatePicker::make('date')
+                ->required(),
+
+                Forms\Components\TextInput::make('montant')
+                ->required()
+                ->suffix('FCFA')
+                ->maxLength(255),
+
+                Forms\Components\TextInput::make('fournisseur')
+                ->required()
+                ->maxLength(255),
             ]);
     }
 
@@ -31,7 +55,12 @@ class FactureResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('depense.libelle'),
+                Tables\Columns\TextColumn::make('numero'),
+                Tables\Columns\TextColumn::make('fichier'),
+                Tables\Columns\TextColumn::make('date'),
+                Tables\Columns\TextColumn::make('montant'),
+                Tables\Columns\TextColumn::make('fournisseur'),
             ])
             ->filters([
                 //

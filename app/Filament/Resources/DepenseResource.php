@@ -32,8 +32,7 @@ class DepenseResource extends Resource
                 Forms\Components\Select::make('personnel_id')
                 ->relationship('personnel', 'name')
                 ->searchable()
-                ->preload()
-                ->required(),
+                ->preload(),
 
                 Forms\Components\TextInput::make('libelle')
                 ->required()
