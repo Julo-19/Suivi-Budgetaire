@@ -49,6 +49,18 @@ class SalaireResource extends Resource
                 ->label('Salaire')
                 ->numeric()
                 ->suffix('FCFA')
+                ->required(),
+
+                Forms\Components\Select::make('annee')
+                ->label('Année')
+                ->options([
+                    '2020' => '2020',
+                    '2021' => '2021',
+                    '2022' => '2023',
+                    '2023' => '2023',
+                    '2024' => '2024',
+                    '2025' => '2025',
+                ])
                 ->required()
 
     
@@ -64,6 +76,7 @@ class SalaireResource extends Resource
                 Tables\Columns\TextColumn::make('personnel.name')
                 ->label('Nom du personnel'),
                 Tables\Columns\TextColumn::make('mois'),
+                Tables\Columns\TextColumn::make('annee'),
                 Tables\Columns\TextColumn::make('net_a_payer')
                 ->label('Salaire')
                 ->suffix(' FCFA'), 
