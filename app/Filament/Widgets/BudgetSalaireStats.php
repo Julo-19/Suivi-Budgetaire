@@ -14,7 +14,7 @@ class BudgetSalaireStats extends BaseWidget
 
         return [
             Stat::make('Total salaires', number_format($totalSalaires, 0, ',', ' ') . ' FCFA')
-                ->description('Somme totale des salaires versés')
+                ->description('Totale des salaires versés')
                 ->color('success'),
         ];
     }
