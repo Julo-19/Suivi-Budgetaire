@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: suivi_budg
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: suivi_budg_db
+    environment:
+      MYSQL_DATABASE: suivi_budgetaire
+      #MYSQL_USER: root
+      #MYSQL_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: passer
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
