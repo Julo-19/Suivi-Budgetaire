@@ -53,13 +53,42 @@
 
 pipeline {
   agent any
+
+  environment {
+    PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  }
+
   stages {
-    stage('Vérifier le PATH et Docker') {
+    stage('Build Docker Image') {
       steps {
-        sh 'echo "👉 PATH = $PATH"'
-        sh 'which docker || echo "❌ Docker introuvable"'
-        sh 'docker --version || echo "❌ docker --version échoué"'
+        sh 'docker build -t julo1997/suivi-budgetaire:latest .'
       }
+    }
+
+    stage('Lister images Docker') {
+      steps {
+        sh 'docker images'
+      }
+    }
+
+    stage('Push Docker Image') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+          sh '''
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+            docker push julo1997/suivi-budgetaire:latest
+          '''
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      echo '❌ Pipeline échoué.'
+    }
+    success {
+      echo '✅ Pipeline réussi.'
     }
   }
 }
