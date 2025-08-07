@@ -51,11 +51,23 @@
 //     }
 // }
 
+
 pipeline {
   agent any
 
-  environment {
-    PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+   environment {
+        IMAGE_NAME = 'julo1997/suivi-budgetaire'
+        IMAGE_TAG = 'latest'
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+   }
+
+    stages {
+        stage('Cloner le dépôt') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/Julo-19/Suivi-Budgetaire.git'
+            }
+        }
   }
 
   stages {
