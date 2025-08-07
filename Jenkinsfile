@@ -21,11 +21,11 @@ pipeline {
         }
 
         // Active cette partie si tu veux pousser sur Docker Hub
-        /*
+        
         stage('Pusher sur Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
+                    credentialsId: 'dockerhub-credentials',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
@@ -34,6 +34,6 @@ pipeline {
                 }
             }
         }
-        */
+
     }
 }
