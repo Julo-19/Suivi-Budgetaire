@@ -16,7 +16,7 @@ pipeline {
 
         stage('Construire l’image Docker') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                 sh 'docker build -t julo1997/suivi-budgetaire:latest .'
             }
         }
 
