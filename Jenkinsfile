@@ -9,19 +9,23 @@ pipeline {
     stages {
         stage('Cloner le dépôt') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     url: 'https://github.com/Julo-19/Suivi-Budgetaire.git'
             }
         }
 
         stage('Construire l’image Docker') {
             steps {
-                sh 'docker build -t julo19/suivi-budgetaire:latest .'
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
             }
         }
 
-        // Active cette partie si tu veux pousser sur Docker Hub
-        
+        stage('Lister images Docker') {
+            steps {
+                sh 'docker images'
+            }
+        }
+
         stage('Pusher sur Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
@@ -34,6 +38,14 @@ pipeline {
                 }
             }
         }
+    }
 
+    post {
+        success {
+            echo '✅ Pipeline terminé avec succès !'
+        }
+        failure {
+            echo '❌ Pipeline échoué.'
+        }
     }
 }
