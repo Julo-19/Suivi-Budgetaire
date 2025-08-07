@@ -18,7 +18,7 @@ pipeline {
     stage('Analyse SonarQube') {
         steps {
             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                withSonarQubeEnv('SonarQube') { // Ce nom doit correspondre à celui dans la config de Jenkins > "Configurer les outils"
+                withSonarQubeEnv('Sonar-Jenkins') { // Ce nom doit correspondre à celui dans la config de Jenkins > "Configurer les outils"
                 sh '''
                 sonar-scanner \
                     -Dsonar.projectKey=suivi-budgetaire \
