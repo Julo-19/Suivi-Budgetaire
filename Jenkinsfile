@@ -14,22 +14,21 @@ pipeline {
             url: 'https://github.com/Julo-19/Suivi-Budgetaire.git'
       }
     }
-
-  stage('Analyse SonarQube') {
-    steps {
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-            withSonarQubeEnv('Sonar-Jenkins') {
-                sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=suivi-budgetaire \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=$SONAR_TOKEN
-                '''
+   stage('Analyse SonarQube') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-tokens', variable: 'SONAR_TOKEN')]) {
+                    withSonarQubeEnv('Sonar-Jenkins') {
+                        sh '''
+                            sonar-scanner \
+                            -Dsonar.projectKey=suivi-budgetaire \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
+                }
             }
         }
-    }
-}
 
 
 
