@@ -18,7 +18,7 @@ pipeline {
     stage('Analyse SonarQube') {
         steps {
             withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            withSonarQubeEnv('SonarQube') {
+            withSonarQubeEnv('sonar-token') {
             sh '''
                 sonar-scanner \
                 -Dsonar.projectKey=suivi-budgetaire \
