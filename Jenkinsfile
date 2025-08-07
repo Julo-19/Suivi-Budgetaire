@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Lister tous images Docker') {
+        stage('Lister images Docker') {
             steps {
                 sh 'docker images'
             }
