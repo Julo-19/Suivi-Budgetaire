@@ -1,79 +1,23 @@
-// pipeline {
-//     agent any
-
-//     environment {
-//         IMAGE_NAME = 'julo1997/suivi-budgetaire'
-//         IMAGE_TAG = 'latest'
-//     }
-
-//     stages {
-//         stage('Cloner le dépôt') {
-//             steps {
-//                 git branch: 'master',
-//                     url: 'https://github.com/Julo-19/Suivi-Budgetaire.git'
-//             }
-//         }
-
-//         stage('Construire l’image Docker') {
-//             steps {
-//                 sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
-//             }
-//         }
-
-//         stage('Lister images Docker') {
-//             steps {
-//                 sh 'docker images'
-//             }
-//         }
-
-//         stage('Pusher sur Docker Hub') {
-//             steps {
-//                 withCredentials([usernamePassword(
-//                     credentialsId: 'dockerHub-credentials',
-//                     usernameVariable: 'DOCKER_USER',
-//                     passwordVariable: 'DOCKER_PASS'
-//                 )]) {
-//                     sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
-//                     sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
-//                 }
-//             }
-//         }
-
-//     }
-
-//     post {
-//         success {
-//             echo '✅ Pipeline terminé avec succès !'
-//         }
-//         failure {
-//             echo '❌ Pipeline échoué.'
-//         }
-//     }
-// }
-
-
 pipeline {
   agent any
 
-   environment {
-        IMAGE_NAME = 'julo1997/suivi-budgetaire'
-        IMAGE_TAG = 'latest'
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-   }
-
-    stages {
-        stage('Cloner le dépôt') {
-            steps {
-                git branch: 'master',
-                    url: 'https://github.com/Julo-19/Suivi-Budgetaire.git'
-            }
-        }
+  environment {
+    IMAGE_NAME = 'julo1997/suivi-budgetaire'
+    IMAGE_TAG = 'latest'
+    PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
   }
 
   stages {
+    stage('Cloner le dépôt') {
+      steps {
+        git branch: 'master',
+            url: 'https://github.com/Julo-19/Suivi-Budgetaire.git'
+      }
+    }
+
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t julo1997/suivi-budgetaire:latest .'
+        sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
       }
     }
 
@@ -88,7 +32,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'dockerHub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
           sh '''
             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-            docker push julo1997/suivi-budgetaire:latest
+            docker push $IMAGE_NAME:$IMAGE_TAG
           '''
         }
       }
