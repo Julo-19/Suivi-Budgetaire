@@ -20,7 +20,7 @@ pipeline {
                     withSonarQubeEnv('Sonar-Jenkins') {
                         sh '''
                             sonar-scanner \
-                            -Dsonar.projectKey=suivi-budgetaire \
+                            -Dsonar.projectKey=Suivi-Depense-Budget \
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://localhost:9000 \
                             -Dsonar.login=$SONAR_TOKEN
