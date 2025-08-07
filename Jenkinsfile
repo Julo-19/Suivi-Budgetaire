@@ -15,6 +15,24 @@ pipeline {
       }
     }
 
+    stage('Analyse SonarQube') {
+        steps {
+            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            withSonarQubeEnv('SonarQube') {
+            sh '''
+                sonar-scanner \
+                -Dsonar.projectKey=suivi-budgetaire \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=http://localhost:9000 \
+                -Dsonar.login=$SONAR_TOKEN
+               '''
+            }
+        }
+    }
+}
+
+
+
     stage('Build Docker Image') {
       steps {
         sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
