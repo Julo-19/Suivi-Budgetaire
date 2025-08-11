@@ -3,16 +3,20 @@ FROM php:8.3-apache
 
 # Installe les dépendances
 RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    zlib1g-dev \
+    g++ \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libicu-dev \
     zip \
     unzip \
     curl \
     git \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip intl
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl pdo pdo_mysql zip
+
 
 # Active mod_rewrite d’Apache
 RUN a2enmod rewrite
