@@ -6,12 +6,13 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libicu-dev \
     zip \
     unzip \
     curl \
     git \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    && docker-php-ext-install pdo pdo_mysql zip intl
 
 # Active mod_rewrite d’Apache
 RUN a2enmod rewrite
