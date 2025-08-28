@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = 'julo1997/suivi-budgetaire'
         IMAGE_TAG = "${env.GIT_COMMIT.take(7)}" // version basée sur le commit
         PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-        K8S_NAMESPACE = "default" // modifie si tu utilises un namespace spécifique
+        K8S_NAMESPACE = "default" // modifie si nécessaire
     }
 
     stages {
@@ -57,8 +57,11 @@ pipeline {
 
         stage('Déploiement Kubernetes') {
             steps {
-                withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://<minikube-or-cluster>']) {
+                // On récupère le kubeconfig stocké dans Jenkins
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     sh """
+                        export KUBECONFIG=$KUBECONFIG_FILE
+                        
                         # Appliquer les secrets et configmaps
                         kubectl apply -f k8s/app-secret.yaml -n $K8S_NAMESPACE
                         kubectl apply -f k8s/configMap.yaml -n $K8S_NAMESPACE
@@ -81,24 +84,13 @@ pipeline {
 
         stage('Vérification du déploiement') {
             steps {
-                sh """
-                    echo "Pods Laravel:"
-                    kubectl get pods -l app=suivi-depense-budg -n $K8S_NAMESPACE
-                    echo "Service Laravel:"
-                    kubectl get svc suivi-depense-budg-service -n $K8S_NAMESPACE
-                    echo "Ingress:"
-                    kubectl get ingress -n $K8S_NAMESPACE
-                """
-            }
-        }
-    }
-
-    post {
-        failure {
-            echo '❌ Pipeline échoué.'
-        }
-        success {
-            echo '✅ Pipeline terminé avec succès.'
-        }
-    }
-}
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    sh """
+                        export KUBECONFIG=$KUBECONFIG_FILE
+                        
+                        echo "Pods Laravel:"
+                        kubectl get pods -l app=suivi-depense-budg -n $K8S_NAMESPACE
+                        echo "Service Laravel:"
+                        kubectl get svc suivi-depense-budg-service -n $K8S_NAMESPACE
+                        echo "Ingress:"
+                        kubectl get in
