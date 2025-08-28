@@ -57,30 +57,35 @@ pipeline {
 
         stage('Déploiement Kubernetes') {
             steps {
-                // On récupère le kubeconfig stocké dans Jenkins
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-                    sh """
-                        export KUBECONFIG=$KUBECONFIG_FILE
-                        
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    // On reste en triple quotes pour éviter l'interpolation Groovy
+                    sh '''
+                        echo "Workspace: $(pwd)"
+                        echo "Fichiers disponibles:"
+                        ls -R
+
                         # Appliquer les secrets et configmaps
                         kubectl apply -f k8s/app-secret.yaml -n $K8S_NAMESPACE
                         kubectl apply -f k8s/configMap.yaml -n $K8S_NAMESPACE
-                        
+
                         # Déployer MySQL
                         kubectl apply -f k8s/mysql.yaml -n $K8S_NAMESPACE
                         kubectl apply -f k8s/app-service.yaml -n $K8S_NAMESPACE
-                        
+
+                        # Mettre à jour l'image Docker dans le deployment
+                        sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" k8s/suivi-depense-budg-deployment.yaml
+
                         # Déployer Laravel
-                        sed -i 's|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|' k8s/suivi-depense-budg-deployment.yaml
-                        kubectl apply -f k8s/app-deployment.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f k8s/suivi-depense-budg-deployment.yaml -n $K8S_NAMESPACE
                         kubectl apply -f k8s/suivi-depense-budg-service.yaml -n $K8S_NAMESPACE
-                        
+
                         # Appliquer Ingress
                         kubectl apply -f k8s/ingress.yaml -n $K8S_NAMESPACE
-                    """
+                    '''
                 }
             }
         }
+
 
         stage('Vérification du déploiement') {
             steps {
