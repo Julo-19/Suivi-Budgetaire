@@ -93,4 +93,19 @@ pipeline {
                         echo "Service Laravel:"
                         kubectl get svc suivi-depense-budg-service -n $K8S_NAMESPACE
                         echo "Ingress:"
-                        kubectl get in
+                        kubectl get ingress -n $K8S_NAMESPACE
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo '❌ Pipeline échoué.'
+        }
+        success {
+            echo '✅ Pipeline terminé avec succès.'
+        }
+    }
+}
