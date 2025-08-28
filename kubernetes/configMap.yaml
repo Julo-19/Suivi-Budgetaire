@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel-config
+data:
+  .env: |
+    APP_NAME=suivi_budgetaire
+    APP_ENV=local
+    APP_KEY=base64:YU1qfpXe9CiY7r7HtRBxAaPvJCGLPzTOwbA3+VJawuI=
+    APP_DEBUG=true
+    APP_URL=http://localhost
+    LOG_CHANNEL=stack
+
+    DB_CONNECTION=mysql
+    DB_HOST=mysql-service
+    DB_PORT=3306
+    DB_DATABASE=suivi_budgetaire
+    DB_USERNAME=admin
+    DB_PASSWORD=passer
+
+    SESSION_DRIVER=database
+    SESSION_LIFETIME=120

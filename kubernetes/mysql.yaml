@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+  labels:
+    app: mysql       # Le label sera utilisé par le Service pour cibler ce Pod
+spec:
+  containers:
+  - name: mysql
+    image: mysql:8.0
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysql-secret       # Référence au Secret pour le mot de passe root
+          key: mysql-root-password
+    - name: MYSQL_DATABASE
+      value: suivi_budgetaire       # La base créée automatiquement à l'init
+    - name: MYSQL_USER
+      value: laravel                # Utilisateur Laravel
+    - name: MYSQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysql-secret       # Mot de passe Laravel depuis le Secret
+          key: mysql-password
+    ports:
+    - containerPort: 3306
+    volumeMounts:
+    - name: mysql-storage
+      mountPath: /var/lib/mysql
+  volumes:
+  - name: mysql-storage
+    persistentVolumeClaim:
+      claimName: mysql-pvc         # PVC pour la persistance des données
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql                      # Le Service cible le Pod avec ce label
+  ports:
+  - protocol: TCP
+    port: 3306                      # Port interne du cluster
+    targetPort: 3306                # Port du container MySQL
+  type: ClusterIP                   # Accessible uniquement dans le cluster

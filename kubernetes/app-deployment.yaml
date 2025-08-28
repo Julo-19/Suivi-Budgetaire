@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suivi-depense-budg
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: suivi-depense-budg
+  template:
+    metadata:
+      labels:
+        app: suivi-depense-budg
+    spec:
+      containers:
+      - name: laravel
+        image: julo1997/suivi-budgetaire:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: laravel-env
+          mountPath: /var/www/html/.env
+          subPath: .env
+        command: ["sh", "-c"]
+        args:
+          - |
+            php artisan config:clear && \
+            php artisan cache:clear && \
+            php artisan route:clear && \
+            php artisan view:clear && \
+            apache2-foreground
+      volumes:
+      - name: laravel-env
+        configMap:
+          name: laravel-config
+          items:
+          - key: .env
+            path: .env
