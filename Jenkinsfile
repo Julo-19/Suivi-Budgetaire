@@ -65,22 +65,22 @@ pipeline {
                         ls -R
 
                         # Appliquer les secrets et configmaps
-                        kubectl apply -f k8s/app-secret.yaml -n $K8S_NAMESPACE
-                        kubectl apply -f k8s/configMap.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/app-secret.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/configMap.yaml -n $K8S_NAMESPACE
 
                         # Déployer MySQL
-                        kubectl apply -f k8s/mysql.yaml -n $K8S_NAMESPACE
-                        kubectl apply -f k8s/app-service.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/mysql.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/app-service.yaml -n $K8S_NAMESPACE
 
                         # Mettre à jour l'image Docker dans le deployment
-                        sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" k8s/suivi-depense-budg-deployment.yaml
+                        sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" kubernetes/suivi-depense-budg-deployment.yaml
 
                         # Déployer Laravel
-                        kubectl apply -f k8s/suivi-depense-budg-deployment.yaml -n $K8S_NAMESPACE
-                        kubectl apply -f k8s/suivi-depense-budg-service.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/suivi-depense-budg-deployment.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/suivi-depense-budg-service.yaml -n $K8S_NAMESPACE
 
                         # Appliquer Ingress
-                        kubectl apply -f k8s/ingress.yaml -n $K8S_NAMESPACE
+                        kubectl apply -f kubernetes/ingress.yaml -n $K8S_NAMESPACE
                     '''
                 }
             }
