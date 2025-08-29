@@ -70,8 +70,8 @@ pipeline {
                         kubectl apply -f kubernetes/app-service.yaml -n $K8S_NAMESPACE
                         
                         # Déployer Laravel
-                        sed -i '' "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" kubernetes/suivi-depense-budg-deployment.yaml
-                        kubectl apply -f kubernetes/suivi-depense-budg-deployment.yaml -n $K8S_NAMESPACE
+                        sed -i '' "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" kubernetes/app-deployment.yaml
+                        kubectl apply -f kubernetes/app-deployment.yaml -n $K8S_NAMESPACE
                         kubectl apply -f kubernetes/suivi-depense-budg-service.yaml -n $K8S_NAMESPACE
                         
                         # Appliquer Ingress
