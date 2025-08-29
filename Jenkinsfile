@@ -57,31 +57,26 @@ pipeline {
 
         stage('Déploiement Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    // On reste en triple quotes pour éviter l'interpolation Groovy
-                    sh '''
-                        echo "Workspace: $(pwd)"
-                        echo "Fichiers disponibles:"
-                        ls -R
-
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    sh """
+                        export KUBECONFIG=$KUBECONFIG_FILE
+                        
                         # Appliquer les secrets et configmaps
                         kubectl apply -f kubernetes/app-secret.yaml -n $K8S_NAMESPACE
                         kubectl apply -f kubernetes/configMap.yaml -n $K8S_NAMESPACE
-
+                        
                         # Déployer MySQL
                         kubectl apply -f kubernetes/mysql.yaml -n $K8S_NAMESPACE
                         kubectl apply -f kubernetes/app-service.yaml -n $K8S_NAMESPACE
-
-                        # Mettre à jour l'image Docker dans le deployment
-                        sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" kubernetes/suivi-depense-budg-deployment.yaml
-
+                        
                         # Déployer Laravel
+                        sed -i '' "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|" kubernetes/suivi-depense-budg-deployment.yaml
                         kubectl apply -f kubernetes/suivi-depense-budg-deployment.yaml -n $K8S_NAMESPACE
                         kubectl apply -f kubernetes/suivi-depense-budg-service.yaml -n $K8S_NAMESPACE
-
+                        
                         # Appliquer Ingress
                         kubectl apply -f kubernetes/ingress.yaml -n $K8S_NAMESPACE
-                    '''
+                    """
                 }
             }
         }
