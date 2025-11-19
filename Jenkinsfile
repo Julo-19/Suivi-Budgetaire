@@ -59,7 +59,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     sh """
-                        export KUBECONFIG=$KUBECONFIG_FILE
+                        
+                        export KUBECONFIG=/Users/macbook/.kube/config
                         
                         # Appliquer les secrets et configmaps
                         kubectl apply -f kubernetes/app-secret.yaml -n $K8S_NAMESPACE
