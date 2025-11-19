@@ -16,21 +16,21 @@ pipeline {
             }
         }
 
-        // stage('Scan SonarQube') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-        //             withSonarQubeEnv('Sonar-Jenkins') {
-        //                 sh '''
-        //                     sonar-scanner \
-        //                     -Dsonar.projectKey=Suivi-Depense-Budget \
-        //                     -Dsonar.sources=. \
-        //                     -Dsonar.host.url=http://localhost:9000 \
-        //                     -Dsonar.login=$SONAR_TOKEN
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Scan SonarQube') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    withSonarQubeEnv('Sonar-Jenkins') {
+                        sh '''
+                            sonar-scanner \
+                            -Dsonar.projectKey=Suivi-Depense-Budget \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -38,11 +38,11 @@ pipeline {
             }
         }
 
-        // stage('Lister Images Docker') {
-        //     steps {
-        //         sh 'docker images'
-        //     }
-        // }
+        stage('Lister Images Docker') {
+            steps {
+                sh 'docker images'
+            }
+        }
 
         stage('Push Docker Image') {
             steps {

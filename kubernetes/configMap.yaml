@@ -15,8 +15,8 @@ data:
     DB_HOST=mysql-service
     DB_PORT=3306
     DB_DATABASE=suivi_budgetaire
-    DB_USERNAME=admin
-    DB_PASSWORD=passer
+    DB_USERNAME=root
+    DB_PASSWORD=rootpassword
 
     SESSION_DRIVER=database
     SESSION_LIFETIME=120

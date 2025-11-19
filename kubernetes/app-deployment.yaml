@@ -24,10 +24,17 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            php artisan config:clear && \
-            php artisan cache:clear && \
-            php artisan route:clear && \
-            php artisan view:clear && \
+            echo "Waiting for MySQL..."
+            while ! nc -z mysql-service 3306; do
+              sleep 2
+            done
+            echo "MySQL ready! Running migrations..."
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan cache:clear
+            php artisan route:clear
+            php artisan view:clear
+            echo "Starting Apache..."
             apache2-foreground
       volumes:
       - name: laravel-env
