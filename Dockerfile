@@ -3,7 +3,7 @@ FROM php:8.3-apache
 
 # Installe les dépendances système
 RUN apt-get update && apt-get install -y \
-    netcat \
+    netcat-openbsd \
     libicu-dev zlib1g-dev g++ libpng-dev libonig-dev libxml2-dev zip unzip curl git libzip-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl pdo pdo_mysql zip
